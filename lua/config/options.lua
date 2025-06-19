@@ -14,23 +14,22 @@ vim.opt.expandtab = true -- Use spaces instead of tabs
 
 -- vim.g.autoformat = false
 
-vim.o.clipboard = "unnamedplus"
-
-local function paste()
-    return {
-        vim.fn.split(vim.fn.getreg(""), "\n"),
-        vim.fn.getregtype(""),
-    }
-end
-
-vim.g.clipboard = {
-    name = "OSC 52",
-    copy = {
+if not vim.g.vscode then       -- ordinary terminal or ssh
+    vim.o.clipboard = "unnamedplus"
+  
+    local function paste()
+      return { vim.fn.split(vim.fn.getreg(""), "\n"), vim.fn.getregtype("") }
+    end
+  
+    vim.g.clipboard = {
+      name = "OSC 52",
+      copy  = {
         ["+"] = require("vim.ui.clipboard.osc52").copy("+"),
         ["*"] = require("vim.ui.clipboard.osc52").copy("*"),
-    },
-    paste = {
-        ["+"] = paste,
-        ["*"] = paste,
-    },
-}
+      },
+      paste = {["+"] = paste, ["*"] = paste},
+    }
+  else                            -- running inside VS Code
+    vim.o.clipboard = "unnamedplus"  -- let the extension keep its own provider
+  end
+  
