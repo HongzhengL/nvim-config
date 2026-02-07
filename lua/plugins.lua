@@ -87,6 +87,44 @@ return {
             -- put your config here
         end,
     },
+    {
+        "b0o/incline.nvim",
+        event = "BufReadPre",
+        dependencies = { "nvim-tree/nvim-web-devicons" },
+        config = function()
+            local colors = require("tokyonight.colors").setup()
+
+            require("incline").setup({
+                highlight = {
+                    groups = {
+                        InclineNormal = { guibg = "#FC56B1", guifg = colors.black },
+                        InclineNormalNC = { guifg = "#FC56B1", guibg = colors.black },
+                    },
+                },
+                window = {
+                    placement = { horizontal = "right", vertical = "top" },
+                    margin = { vertical = 0, horizontal = 1 },
+                },
+                render = function(props)
+                    local bufname = vim.api.nvim_buf_get_name(props.buf)
+                    if bufname == "" then
+                        return { " [No Name] " }
+                    end
+
+                    local path = vim.fn.fnamemodify(bufname, ":p:~")
+                    -- local modified = vim.bo[props.buf].modified and " ●" or ""
+
+                    local filename = vim.fn.fnamemodify(bufname, ":t")
+                    local icon, color = require("nvim-web-devicons").get_icon_color(filename)
+
+                    return {
+                        { " ", icon, " ", guifg = color },
+                        { path .. " " },
+                    }
+                end,
+            })
+        end,
+    },
     -- {
     --     "chentoast/marks.nvim",
     --     event = "VeryLazy",
