@@ -10,6 +10,7 @@ vim.opt.shiftwidth = 4 -- Number of spaces used for auto-indentation
 -- vim.opt.shiftwidth = 2 -- Number of spaces used for auto-indentation
 
 vim.opt.expandtab = true -- Use spaces instead of tabs
+vim.opt.undolevels = 10000
 -- vim.opt.expandtab = false
 
 -- vim.g.autoformat = false
